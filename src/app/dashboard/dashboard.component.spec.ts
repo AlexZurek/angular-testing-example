@@ -1,25 +1,60 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { DashboardComponent } from './dashboard.component';
+import { componentTestingSetup } from 'angular-component-driver';
+import { DashboardComponentDriver } from './dashboard.driver';
+import { HeroService } from '../hero.service';
+import { Spy } from 'jasmine-auto-spies';
+import { Hero } from '../hero';
+
+function testSetup() {
+  return componentTestingSetup({
+    componentClass: DashboardComponent,
+    driver: DashboardComponentDriver,
+    servicesToStub: [HeroService],
+  });
+}
 
 describe('DashboardComponent', () => {
-  let component: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+  let myComponentDriver: DashboardComponentDriver;
+  let heroServiceSpy: Spy<HeroService>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DashboardComponent ]
-    })
-    .compileComponents();
-  }));
+  describe('no heroes', () => {
+    beforeEach(() => {
+      myComponentDriver = testSetup().createComponentDriver();
+      heroServiceSpy = myComponentDriver.injector.get(HeroService);
+      heroServiceSpy.getHeroes.and.nextWith([]);
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    beforeEach(() => {
+      myComponentDriver.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(myComponentDriver.componentInstance).toBeTruthy();
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  describe('three heroes', () => {
+    const heroes: Hero[] = [
+      { id: 10, name: 'Dr Evil' },
+      { id: 13, name: 'Dr Doolittle' },
+      { id: 14, name: 'Dr Nick' },
+    ];
+
+    beforeEach(() => {
+      myComponentDriver = testSetup().createComponentDriver();
+      heroServiceSpy = myComponentDriver.injector.get(HeroService);
+      heroServiceSpy.getHeroes.and.nextWith(heroes);
+    });
+
+    beforeEach(() => {
+      myComponentDriver.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(myComponentDriver.componentInstance).toBeTruthy();
+      const heroes = myComponentDriver.heroElements;
+      expect(heroes.length).toBe(3);
+      expect(heroes[0].textContent).toBe('Dr Evil');
+    });
   });
 });
