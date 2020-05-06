@@ -2,7 +2,7 @@ import { HeroDetailComponent } from './hero-detail.component';
 import { HeroDetailComponentDriver } from './hero-detail.driver';
 import { componentTestingSetup } from 'angular-component-driver';
 import { Spy } from 'jasmine-auto-spies';
-import { HeroService } from '../hero.service';
+import { HeroService } from '../../services/hero/hero.service';
 import { RouterTestingModule } from '@angular/router/testing';
 
 function testSetup() {

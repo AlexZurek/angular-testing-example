@@ -1,19 +1,19 @@
-import { HeroesComponent } from './heroes.component';
-import { HeroesComponentDriver } from './heroes.driver';
+import { HeroSearchComponent } from './hero-search.component';
+import { HeroSearchComponentDriver } from './hero-search.driver';
 import { componentTestingSetup } from 'angular-component-driver';
 import { Spy } from 'jasmine-auto-spies';
-import { HeroService } from '../hero.service';
+import { HeroService } from '../../services/hero/hero.service';
 
 function testSetup() {
   return componentTestingSetup({
-    componentClass: HeroesComponent,
-    driver: HeroesComponentDriver,
+    componentClass: HeroSearchComponent,
+    driver: HeroSearchComponentDriver,
     servicesToStub: [HeroService],
   });
 }
 
-describe('HeroDetailComponent', () => {
-  let componentDriver: HeroesComponentDriver;
+describe('HeroSearchComponent', () => {
+  let componentDriver: HeroSearchComponentDriver;
   let heroServiceSpy: Spy<HeroService>;
 
   beforeEach(() => {

@@ -1,9 +1,9 @@
 import { DashboardComponent } from './dashboard.component';
 import { componentTestingSetup } from 'angular-component-driver';
 import { DashboardComponentDriver } from './dashboard.driver';
-import { HeroService } from '../hero.service';
+import { HeroService } from '../../services/hero/hero.service';
 import { Spy } from 'jasmine-auto-spies';
-import { Hero } from '../hero';
+import { Hero } from '../../hero';
 
 function testSetup() {
   return componentTestingSetup({
