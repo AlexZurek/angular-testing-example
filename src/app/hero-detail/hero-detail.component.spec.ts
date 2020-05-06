@@ -1,25 +1,34 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HeroDetailComponent } from './hero-detail.component';
+import { HeroDetailComponentDriver } from './hero-detail.driver';
+import { componentTestingSetup } from 'angular-component-driver';
+import { Spy } from 'jasmine-auto-spies';
+import { HeroService } from '../hero.service';
+import { RouterTestingModule } from '@angular/router/testing';
+
+function testSetup() {
+  return componentTestingSetup({
+    componentClass: HeroDetailComponent,
+    driver: HeroDetailComponentDriver,
+    servicesToStub: [HeroService],
+    imports: [RouterTestingModule],
+  });
+}
 
 describe('HeroDetailComponent', () => {
-  let component: HeroDetailComponent;
-  let fixture: ComponentFixture<HeroDetailComponent>;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ HeroDetailComponent ]
-    })
-    .compileComponents();
-  }));
+  let componentDriver: HeroDetailComponentDriver;
+  let heroServiceSpy: Spy<HeroService>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeroDetailComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    componentDriver = testSetup().createComponentDriver();
+    heroServiceSpy = componentDriver.injector.get(HeroService);
+    heroServiceSpy.getHero.and.nextWith({ id: 2, name: 'Hello World' });
+  });
+
+  beforeEach(() => {
+    componentDriver.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(componentDriver.componentInstance).toBeTruthy();
   });
 });

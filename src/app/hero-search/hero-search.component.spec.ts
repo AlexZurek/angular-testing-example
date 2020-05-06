@@ -1,25 +1,32 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { HeroSearchComponent } from './hero-search.component';
+import { HeroSearchComponentDriver } from './hero-search.driver';
+import { componentTestingSetup } from 'angular-component-driver';
+import { Spy } from 'jasmine-auto-spies';
+import { HeroService } from '../hero.service';
 
-describe('HeroSearchComponent', () => {
-  let component: HeroSearchComponent;
-  let fixture: ComponentFixture<HeroSearchComponent>;
+function testSetup() {
+  return componentTestingSetup({
+    componentClass: HeroSearchComponent,
+    driver: HeroSearchComponentDriver,
+    servicesToStub: [HeroService],
+  });
+}
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ HeroSearchComponent ]
-    })
-    .compileComponents();
-  }));
+describe('HeroDetailComponent', () => {
+  let componentDriver: HeroSearchComponentDriver;
+  let heroServiceSpy: Spy<HeroService>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeroSearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    componentDriver = testSetup().createComponentDriver();
+    heroServiceSpy = componentDriver.injector.get(HeroService);
+    heroServiceSpy.getHeroes.and.nextWith([]);
+  });
+
+  beforeEach(() => {
+    componentDriver.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(componentDriver.componentInstance).toBeTruthy();
   });
 });
